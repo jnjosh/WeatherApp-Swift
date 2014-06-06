@@ -16,8 +16,6 @@
 		A45B2D39194167F100522998 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45B2D38194167F100522998 /* Font.swift */; };
 		A46ABD3219414AAC003D64AE /* NibBackedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46ABD3119414AAC003D64AE /* NibBackedView.swift */; };
 		A46ABD3419414BFA003D64AE /* TemperatureHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46ABD3319414BFA003D64AE /* TemperatureHeaderView.swift */; };
-		A46ABD3C19414CB7003D64AE /* weatherapp.mockup.png in Resources */ = {isa = PBXBuildFile; fileRef = A46ABD3919414CB7003D64AE /* weatherapp.mockup.png */; };
-		A46ABD3D19414CB7003D64AE /* weatherapp.redlines.png in Resources */ = {isa = PBXBuildFile; fileRef = A46ABD3A19414CB7003D64AE /* weatherapp.redlines.png */; };
 		A46ABD4019414CE7003D64AE /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46ABD3F19414CE7003D64AE /* Color.swift */; };
 		A4897B2B193D9B930012C413 /* TemperatureTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4897B29193D9B930012C413 /* TemperatureTableViewCell.swift */; };
 		A4897B2C193D9B930012C413 /* TemperatureTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4897B2A193D9B930012C413 /* TemperatureTableViewCell.xib */; };
@@ -49,9 +47,6 @@
 		A45B2D38194167F100522998 /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		A46ABD3119414AAC003D64AE /* NibBackedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibBackedView.swift; sourceTree = "<group>"; };
 		A46ABD3319414BFA003D64AE /* TemperatureHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureHeaderView.swift; sourceTree = "<group>"; };
-		A46ABD3819414CB7003D64AE /* FunctionalSpec.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = FunctionalSpec.md; sourceTree = "<group>"; };
-		A46ABD3919414CB7003D64AE /* weatherapp.mockup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = weatherapp.mockup.png; sourceTree = "<group>"; };
-		A46ABD3A19414CB7003D64AE /* weatherapp.redlines.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = weatherapp.redlines.png; sourceTree = "<group>"; };
 		A46ABD3F19414CE7003D64AE /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		A46CDCA6193D935000C31F22 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		A4897B29193D9B930012C413 /* TemperatureTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureTableViewCell.swift; sourceTree = "<group>"; };
@@ -87,7 +82,6 @@
 				A4530790193D5CEB007B249D /* Views */,
 				A453078F193D5CE6007B249D /* Models */,
 				A4530780193D5CC0007B249D /* Tests */,
-				A46ABD3719414CB7003D64AE /* WeatherAppSpec */,
 				A453076C193D5CC0007B249D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -165,16 +159,6 @@
 				A46ABD3119414AAC003D64AE /* NibBackedView.swift */,
 			);
 			name = Protocols;
-			sourceTree = "<group>";
-		};
-		A46ABD3719414CB7003D64AE /* WeatherAppSpec */ = {
-			isa = PBXGroup;
-			children = (
-				A46ABD3819414CB7003D64AE /* FunctionalSpec.md */,
-				A46ABD3919414CB7003D64AE /* weatherapp.mockup.png */,
-				A46ABD3A19414CB7003D64AE /* weatherapp.redlines.png */,
-			);
-			path = WeatherAppSpec;
 			sourceTree = "<group>";
 		};
 		A46ABD3E19414CCA003D64AE /* Structs */ = {
@@ -267,9 +251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A45B2D37194166DB00522998 /* TemperatureHeaderView.xib in Resources */,
-				A46ABD3D19414CB7003D64AE /* weatherapp.redlines.png in Resources */,
 				A45307A3193D5DD0007B249D /* Main.storyboard in Resources */,
-				A46ABD3C19414CB7003D64AE /* weatherapp.mockup.png in Resources */,
 				A4530795193D5DA6007B249D /* Images.xcassets in Resources */,
 				A4897B2C193D9B930012C413 /* TemperatureTableViewCell.xib in Resources */,
 			);

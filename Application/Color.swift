@@ -11,9 +11,9 @@ import UIKit
 struct Color {
     
     static func colorWithHex(hex: UInt32, alpha: CGFloat) -> UIColor {
-        let red = Double((hex & 0xFF0000) >> 16) / 255.0 as CGFloat
-        let green = Double((hex & 0x00FF00) >> 8) / 255.0 as CGFloat
-        let blue = Double(hex & 0x0000FF) / 255.0 as CGFloat
+        let red = Double((hex & 0xFF0000) >> 16) / 255.0
+        let green = Double((hex & 0x00FF00) >> 8) / 255.0
+        let blue = Double(hex & 0x0000FF) / 255.0
         return UIColor(red: red, green: green, blue: blue, alpha: alpha)
     }
     

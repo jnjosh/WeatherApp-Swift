@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Runes
+import Argo
 
 class APIClient: NSObject
 {
@@ -20,65 +22,61 @@ class APIClient: NSObject
     var formatter = NSNumberFormatter()
     
     func fetchWeatherWithLatitude(latitude: Double, longitude: Double, completion:((WeatherItem?) -> Void)!) {
-        
         let URLString = baseURLString.stringByAppendingFormat(weatherPathFormat, latitude, longitude)
-        let URL = NSURL(string: URLString)
-        let request = NSURLRequest(URL: URL)
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler: {
-            (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+        if let URL = NSURL(string: URLString) {
+            let request = NSURLRequest(URL: URL)
             
-            if !response {
-                completion(nil)
-                return;
-            }
-            
-            var jsonError: NSError? = nil
-            var dictionary : AnyObject! = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &jsonError)
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                var item = WeatherItem(temperatureDictionary: dictionary as Dictionary)
-                completion(item);
+            NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler: {
+                (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+                
+                if response == nil {
+                    completion(nil)
+                    return;
+                }
+                
+                var jsonError: NSError? = nil
+                if let result: AnyObject = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions(0), error: &jsonError) {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        let value = JSONValue.parse(result)
+                        let item = WeatherItem.decode(value)
+                        completion(item)
+                    })
+                }
             })
-        })
+        }
     }
     
-    
-    func fetchWeatherForecastWithLatitude(latitude: Double, longitude: Double, completion:((WeatherItem[]?) -> Void)!) {
+    func fetchWeatherForecastWithLatitude(latitude: Double, longitude: Double, completion:(([WeatherItem]?) -> Void)!) {
         let URLString = baseURLString.stringByAppendingFormat(forecastPathFormat, latitude, longitude)
-        let URL = NSURL(string: URLString)
-        let request = NSURLRequest(URL: URL)
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler: {
-            (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+        if let URL = NSURL(string: URLString) {
+            let request = NSURLRequest(URL: URL)
             
-            if !response {
-                completion(nil)
-                return;
-            }
-            
-            var jsonError: NSError? = nil
-            var dictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions(), error: &jsonError) as NSDictionary
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                let list = dictionary["list"] as NSArray
-                var items = WeatherItem[]()
-
-                list.enumerateObjectsUsingBlock({ object, index, stop in
-                    var listItem = object as NSDictionary
-                    
-                    var temp = listItem["temp"] as NSDictionary
-                    var day: AnyObject = temp["day"]
-                    
-                    var number = self.formatter.numberFromString(day.description).doubleValue
-                    var weatherItem = WeatherItem(kelvinDegrees: number, cityName: "")
-                    
-                    items.append(weatherItem)
-                })
+            NSURLConnection.sendAsynchronousRequest(request, queue: queue, completionHandler: {
+                (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
                 
-                completion(items)
-
+                if response == nil {
+                    completion(nil)
+                    return;
+                }
+                
+                var jsonError: NSError? = nil
+                if let result: AnyObject = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions(0), error: &jsonError) {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        let list = JSONValue.parse(result)
+                        let item = Forecast.decode(list)
+                        
+                        if let items = item?.weatherItems {
+                            let weatherItems = items.map { item in
+                                return WeatherItem(kelvin: item.kelvin, city: nil)
+                            }
+                            
+                            completion(weatherItems)
+                        }
+                    })
+                }
             })
-        })
+        }
     }
 }

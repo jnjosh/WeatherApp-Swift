@@ -10,8 +10,8 @@ import UIKit
 
 class TemperatureTableViewCell: UITableViewCell, NibBackedView {
     
-    @IBOutlet var label : UILabel
-    @IBOutlet var dayLabel : UILabel
+    @IBOutlet var label : UILabel!
+    @IBOutlet var dayLabel : UILabel!
     
     class func nib() -> UINib {
         return UINib(nibName: "TemperatureTableViewCell", bundle: nil)

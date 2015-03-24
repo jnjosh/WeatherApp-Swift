@@ -10,7 +10,7 @@ import UIKit
 
 struct Font {
     
-    static func avenirBookWithSize(size: CGFloat) -> UIFont {
+    static func avenirBookWithSize(size: CGFloat) -> UIFont? {
         return UIFont(name: "Avenir-Book", size: size)
     }
     

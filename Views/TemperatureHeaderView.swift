@@ -10,22 +10,22 @@ import UIKit
 
 class TemperatureHeaderView: UIView, NibBackedView {
 
-    @IBOutlet var containerView: UIView
-    @IBOutlet var temperatureLabel: UILabel
-    @IBOutlet var cityLabel: UILabel
+    @IBOutlet var containerView: UIView!
+    @IBOutlet var temperatureLabel: UILabel!
+    @IBOutlet var cityLabel: UILabel!
     
     class func nib() -> UINib {
         return UINib(nibName: "TemperatureHeaderView", bundle: nil)
     }
     
     
-    init(frame: CGRect) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         self.initializeView()
     }
 
     
-    init(coder aDecoder: NSCoder!) {
+    required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.initializeView()
     }

@@ -9,8 +9,7 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource
-{
+class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource {
     let cellIdentifier = "cellIdentifier"
     let headerIdentifier = "headerIdentifier"
     
@@ -22,17 +21,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
     var latitude: Double = 0.0
     var longitude: Double = 0.0
 
-    @lazy var headerView = TemperatureHeaderView(frame: CGRectZero)
+    lazy var headerView = TemperatureHeaderView(frame: CGRectZero)
     let temperatureFormatter = NSNumberFormatter()
     
-    @IBOutlet var tableView : UITableView
+    @IBOutlet var tableView : UITableView!
 
     var weatherItem: WeatherItem?
-    var weatherItems: WeatherItem[]?
+    var weatherItems: [WeatherItem] = [WeatherItem]()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        locationManager.requestWhenInUseAuthorization()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Refresh",
                                                             style: UIBarButtonItemStyle.Plain,
@@ -54,24 +55,28 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
 
     
     func refresh() {
-        navigationItem.rightBarButtonItem.enabled = false;
-
-        locationManager.delegate = self
-        locationManager.startUpdatingLocation()
+        navigationItem.rightBarButtonItem?.enabled = false;
+        
+        if (CLLocationManager.locationServicesEnabled()) {
+            locationManager.delegate = self
+            locationManager.startUpdatingLocation()
+        }
     }
     
 
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: AnyObject[]!) {
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         for item: AnyObject in locations {
-            var location = item as CLLocation
-            if location.horizontalAccuracy < 1000 {
-                latitude = location.coordinate.latitude
-                longitude = location.coordinate.longitude
-                locationManager.stopUpdatingLocation()
-                navigationItem.rightBarButtonItem.enabled = true
-                
-                fetchWeather()
-                fetchForecast()
+            if let location = item as? CLLocation {
+                if location.horizontalAccuracy < 1000 {
+                    latitude = location.coordinate.latitude
+                    longitude = location.coordinate.longitude
+                    manager.stopUpdatingLocation()
+                    
+                    navigationItem.rightBarButtonItem?.enabled = true
+                    
+                    fetchWeather()
+                    fetchForecast()
+                }
             }
         }
     }
@@ -84,13 +89,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
     
     func fetchWeather() {
         self.client.fetchWeatherWithLatitude(latitude, longitude: longitude, completion: { item in
-            if item {
+            if item != nil {
                 let temperature = NSNumber(double: item!.fahrenheit())
-                let temperatureString = self.temperatureFormatter.stringFromNumber(temperature)
-                
-                self.headerView.temperatureLabel.text = "\(temperatureString)º"
-                self.headerView.cityLabel.text = item?.city
-                self.tableView.reloadData()
+                if let temperatureString = self.temperatureFormatter.stringFromNumber(temperature) {
+                    self.headerView.temperatureLabel.text = "\(temperatureString)º"
+                    self.headerView.cityLabel.text = item?.city
+                    self.tableView.reloadData()
+                }
             }
         })
     }
@@ -98,51 +103,51 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
     
     func fetchForecast() {
         self.client.fetchWeatherForecastWithLatitude(latitude, longitude: longitude, completion: { items in
-            if items {
-                self.weatherItems = items!
+            if let weatherItems = items {
+                self.weatherItems = weatherItems
                 self.tableView.reloadData()
             }
         })
     }
-    
-    
-    func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
-        let item = self.weatherItems?[indexPath.row] as WeatherItem
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as TemperatureTableViewCell
+
+        
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let item = self.weatherItems[indexPath.row] as WeatherItem
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! TemperatureTableViewCell
         
         let temperature = NSNumber(double: item.fahrenheit())
-        let temperatureString = self.temperatureFormatter.stringFromNumber(temperature)
-        
-        let calendar = NSCalendar.currentCalendar()
-        
-        dateComponents.day = indexPath.row + 1
-        let date = calendar.dateByAddingComponents(dateComponents, toDate: NSDate(), options: NSCalendarOptions())
-        
-        cell.label.text = "\(temperatureString)º"
-        cell.dayLabel.text = dateFormatter.stringFromDate(date)
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        if let temperatureString = self.temperatureFormatter.stringFromNumber(temperature) {
+            let calendar = NSCalendar.currentCalendar()
+            
+            dateComponents.day = indexPath.row + 1
+            let date = calendar.dateByAddingComponents(dateComponents, toDate: NSDate(), options: NSCalendarOptions())
+            
+            cell.label.text = "\(temperatureString)º"
+            cell.dayLabel.text = dateFormatter.stringFromDate(date!)
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
+        }
         
         return cell as UITableViewCell
     }
     
     
-    func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
-        return weatherItems ? weatherItems!.count : 0
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return weatherItems.count
     }
+
     
-    
-    func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 75.0
     }
 
     
-    func tableView(tableView: UITableView!, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return headerView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
     }
     
     
-    func tableView(tableView: UITableView!, viewForHeaderInSection section: Int) -> UIView! {
-        let tableHeaderView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerIdentifier) as UITableViewHeaderFooterView
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let tableHeaderView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(headerIdentifier) as! UITableViewHeaderFooterView
         tableHeaderView.addSubview(headerView)
         return headerView
     }

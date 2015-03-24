@@ -10,6 +10,6 @@ import UIKit
 
 protocol NibBackedView {
 
-    class func nib() -> UINib
+    static func nib() -> UINib
     
 }

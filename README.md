@@ -1,4 +1,5 @@
-## A sample Weather App (in Swift)
+# Weather App Swift Playground
 
-This isn't some crazy implementation of FlappyBirds, it's just my first attempt at doing something in 
-Swift. I have much to learn.
+- V3: Right after WWDC 2021 with Swift 5.5 and SwiftUI 3
+- V2: Created during WWDC 2015 with Swift 1.2
+- V1: Created during WWDC 2014 with the introduction of Swift

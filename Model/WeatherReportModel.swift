@@ -23,7 +23,7 @@ class WeatherReportModel : ObservableObject {
 
 
     func fetchAllReports(location: CLLocationCoordinate2D) {
-        async {
+        Task {
             do {
                 forecasts.removeAll()
                 

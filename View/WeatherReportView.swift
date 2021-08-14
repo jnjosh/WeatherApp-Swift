@@ -26,11 +26,10 @@ extension WeatherReportView : View {
             }
             .frame(width: 40, height: 40, alignment: .center)
             .clipped()
-
             
             Text(report.temperature)
                 .font(.headline)
-
+                .fontWeight(.bold)
             
             Text("Feels like \(report.feelsLikeTemperature)")
                 .font(.callout.italic())
